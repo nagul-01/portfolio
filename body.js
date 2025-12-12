@@ -68,6 +68,8 @@ setTimeout(() =>{
 
 }, 1500);
 
+// ======================================//
+
 (function () {
   const emailPattern = /^[A-Za-z0-9]+@[A-Za-z0-9]+\.[A-Za-z]{2,}$/;   const toastAutoCloseMS = 2500; 
 
@@ -229,63 +231,133 @@ setTimeout(() =>{
     if (e.key === 'Escape' && overlay.classList.contains('show')) hidePopup();
   });
 
-  function initContactForm() {
-    const form = document.querySelector('.contact-form');
-    if (!form) {
-      console.warn('contact.js: .contact-form not found — popup module injected but form missing.');
-      return;
-    }
+    //   function initContactForm() {
+    //     const form = document.querySelector('.contact-form');
+    //     if (!form) {
+    //       console.warn('contact.js: .contact-form not found — popup module injected but form missing.');
+    //       return;
+    //     }
 
-    const getField = (placeholder, type = 'input') => {
-      let el = form.querySelector(`${type}[placeholder="${placeholder}"]`);
-      if (!el) el = form.querySelector(`${type}[name="${placeholder}"]`);
-      return el;
-    };
+    //     const getField = (placeholder, type = 'input') => {
+    //       let el = form.querySelector(`${type}[placeholder="${placeholder}"]`);
+    //       if (!el) el = form.querySelector(`${type}[name="${placeholder}"]`);
+    //       return el;
+    //     };
 
-    const fullNameEl = getField('Full Name') || form.querySelector('input[name="fullname"]') || null;
-    const emailEl = getField('Email Address') || form.querySelector('input[type="email"]') || null;
-    const phoneEl = getField('Phone Number') || form.querySelector('input[name="phone"]') || null;
-    const subjectEl = getField('Email Subject') || form.querySelector('input[name="subject"]') || null;
-    const messageEl = form.querySelector('textarea') || form.querySelector('textarea[name="message"]') || null;
+    //     const fullNameEl = getField('Full Name') || form.querySelector('input[name="fullname"]') || null;
+    //     const emailEl = getField('Email Address') || form.querySelector('input[type="email"]') || null;
+    //     const phoneEl = getField('Phone Number') || form.querySelector('input[name="phone"]') || null;
+    //     const subjectEl = getField('Email Subject') || form.querySelector('input[name="subject"]') || null;
+    //     const messageEl = form.querySelector('textarea') || form.querySelector('textarea[name="message"]') || null;
 
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
+    //     form.addEventListener('submit', (e) => {
+    //       e.preventDefault();
 
-      const fullName = (fullNameEl && fullNameEl.value || '').trim();
-      const email = (emailEl && emailEl.value || '').trim();
-      const phone = (phoneEl && phoneEl.value || '').trim();
-      const subject = (subjectEl && subjectEl.value || '').trim();
-      const message = (messageEl && messageEl.value || '').trim();
+    //       const fullName = (fullNameEl && fullNameEl.value || '').trim();
+    //       const email = (emailEl && emailEl.value || '').trim();
+    //       const phone = (phoneEl && phoneEl.value || '').trim();
+    //       const subject = (subjectEl && subjectEl.value || '').trim();
+    //       const message = (messageEl && messageEl.value || '').trim();
 
-      if (!fullName || !email || !phone || !subject || !message) {
-        showPopup('error', 'Error', 'Please fill in all fields!', 'TRY AGAIN');
-        return;
-      }
+    //       if (!fullName || !email || !phone || !subject || !message) {
+    //         showPopup('error', 'Error', 'Please fill in all fields!', 'TRY AGAIN');
+    //         return;
+    //       }
 
-      if (!emailPattern.test(email)) {
-        showPopup('error', 'Invalid Email', 'Enter a valid email (letters & numbers only).', 'TRY AGAIN');
-        if (emailEl) emailEl.focus();
-        return;
-      }
+    //       if (!emailPattern.test(email)) {
+    //         showPopup('error', 'Invalid Email', 'Enter a valid email (letters & numbers only).', 'TRY AGAIN');
+    //         if (emailEl) emailEl.focus();
+    //         return;
+    //       }
 
-      const digits = phone.replace(/\D/g, '');
-      if (digits.length < 8) {
-        showPopup('warning', 'Invalid Phone', 'Enter a valid phone number.', 'OK');
-        if (phoneEl) phoneEl.focus();
-        return;
-      }
+    //       const digits = phone.replace(/\D/g, '');
+    //       if (digits.length < 10 ) {
+    //         showPopup('warning', 'Invalid Phone', 'Enter a valid phone number.', 'OK');
+    //         if (phoneEl) phoneEl.focus();
+    //         return;
+    //       }
 
-      showPopup('success', 'Successful', 'Message sent successfully!', 'CLOSE');
+    //       showPopup('success', 'Successful', 'Message sent successfully!', 'CLOSE');
 
-      setTimeout(() => {
-        try { form.reset(); } catch (err) { /* ignore */ }
-      }, 200);
-    });
-  }
+    //       setTimeout(() => {
+    //         try { form.reset(); } catch (err) { /* ignore */ }
+    //       }, 200);
+    //     });
+    //   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initContactForm);
-  } else {
-    initContactForm();
-  }
+    //   if (document.readyState === 'loading') {
+    //     document.addEventListener('DOMContentLoaded', initContactForm);
+    //   } else {
+    //     initContactForm();
+    //   }
+    // })();
 })();
+// Replace only the submit handler inside initContactForm() with this:
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const fullName = (fullNameEl && fullNameEl.value || '').trim();
+  const email = (emailEl && emailEl.value || '').trim();
+  const phone = (phoneEl && phoneEl.value || '').trim();
+  const subject = (subjectEl && subjectEl.value || '').trim();
+  const message = (messageEl && messageEl.value || '').trim();
+
+  if (!fullName || !email || !phone || !subject || !message) {
+    showPopup('error', 'Error', 'Please fill in all fields!', 'TRY AGAIN');
+    return;
+  }
+
+  if (!emailPattern.test(email)) {
+    showPopup('error', 'Invalid Email', 'Enter a valid email (letters & numbers only).', 'TRY AGAIN');
+    if (emailEl) emailEl.focus();
+    return;
+  }
+
+  const digits = phone.replace(/\D/g, '');
+  if (digits.length < 8) {
+    showPopup('warning', 'Invalid Phone', 'Enter a valid phone number.', 'OK');
+    if (phoneEl) phoneEl.focus();
+    return;
+  }
+
+  // Build payload
+  const payload = {
+    fullName, email, phone, subject, message,
+    submittedAt: new Date().toISOString(),
+    // you can add other metadata here (e.g. page URL)
+    page: location.href
+  };
+
+  // Try to POST to server API (recommended)
+  try {
+    const resp = await fetch('/api/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (resp.ok) {
+      showPopup('success', 'Successful', 'Message sent successfully!', 'CLOSE');
+      form.reset();
+      return;
+    } else {
+      // server responded with an error (maybe 401/500)
+      console.warn('server returned non-ok:', resp.status);
+      throw new Error('Server error');
+    }
+  } catch (err) {
+    // Network or server error — fallback to localStorage
+    console.warn('Failed to send to server, saving locally', err);
+    try {
+      const key = 'cg_messages';
+      const existing = JSON.parse(localStorage.getItem(key) || '[]');
+      existing.push(payload);
+      localStorage.setItem(key, JSON.stringify(existing));
+      showPopup('success', 'Saved Locally', 'Message saved locally (owner can retrieve it).', 'CLOSE');
+      form.reset();
+    } catch (le) {
+      console.error('localStorage failed', le);
+      showPopup('error', 'Failed', 'Could not send or save message. Try again later.', 'OK');
+    }
+  }
+});
